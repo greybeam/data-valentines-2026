@@ -1,6 +1,8 @@
 # Dear Snowflake, I Want an Open Relationship
 
-**Data Valentine Challenge 2025** | Hosted by [Greybeam](https://greybeam.ai)
+**Data Valentine Challenge 2025** | Hosted by [Greybeam](https://www.greybeam.ai)
+
+Greybeam deploys multi-engine query infrastructure. We provide a single endpoint that translates and routes queries to the most optimal query engine.
 
 ---
 
@@ -10,9 +12,7 @@ It's the end of November 2025. Your CFO pulls together revenue data for the mont
 
 > "Why don't these numbers match what's in Snowflake?"
 
-You check Snowflake. You check Google Sheets. The numbers are actually different.
-
-How do we check the raw feed?
+You check Snowflake. You check Google Sheets. The numbers are actually different. How do we check the raw feed?
 
 **Your mission:** Your data lives in three places. Snowflake can't query the others. How do you join across systems without building a pipeline?
 
@@ -30,7 +30,7 @@ To connect to Snowflake, we'll be using the Snowflake community extension [here]
 
 Note that you should do this step **after** DuckDB has been installed.
 
-This extension uses ADBC to connect to Snowflake and will only work if it's installed in your extension directory. The folks behind this extension has made that easy. Install by executing one of the following below in your terminal.
+This extension uses ADBC to connect to Snowflake and will only work if it's installed in your extension directory. The folks behind this extension have made that easy. Install by executing one of the following below in your terminal.
 
 Linux / macOS / WSL:
 ```
@@ -89,7 +89,7 @@ LOAD gsheets;
 CREATE SECRET (TYPE gsheet);
 ```
 
-After you login Google will display a token for you to enter back into your terminal as per below:
+After you login, Google will output a token for you to enter back into your terminal as per below:
 ```sql
 CREATE SECRET (TYPE gsheet);
 Visit the below URL to authorize DuckDB GSheets
@@ -195,8 +195,8 @@ SELECT *
 FROM 'https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2025-11.parquet' 
 LIMIT 10;
 ```
-
 Amazing, we're now able to query three different sources all in the same environment. DuckDB is awesome!
+
 ---
 
 ### Step 4: Dig In!
@@ -206,10 +206,11 @@ Now that we're all setup, let's use the nifty DuckDB UI by calling the function 
 call start_ui();
 ```
 
-You'll see a familiar notebook interface. If you've used Jupyter or Hex, you'll feel right at home. Each cell is a. This should be a familiar experience if you've used notebooks in the past. Each cell is an executable chunk. You write SQL, hit run, and results appear right below. You can iterate cell by cell without re-running everything.
+You'll see a familiar notebook interface. If you've used Jupyter or Hex, you'll feel right at home. Each cell is an executable chunk. You write SQL, hit run, and results appear right below. You can iterate cell by cell without re-running everything.
 ![DuckDB UI](images/duckdb_ui.png)
 
 **Setup Views/Tables and Set Time Zone**
+
 Let's create views on each of our data sources so they're easier to reference.
 ```sql
 SET timezone = 'UTC';
@@ -230,6 +231,7 @@ FROM snowflake_db.VALENTINES.REVENUE_RAW_2025_11;
 ```
 
 **Is Our Data Actually Wrong?**
+
 Let's take a look at the monthly aggregates and see whether Snowflake is actually wrong.
 ```sql
 WITH raw AS (
@@ -274,7 +276,8 @@ Looks like our Snowflake data IS indeed off.
 ![Monthly View](images/monthly_view.png)
 
 **Is Everyday Off?**
-Let's take a look at the daily grain and see whether data is off everywhere.
+
+Let's take a look at the daily grain and see whether data is consistently wrong.
 ```sql
 WITH raw AS (
   SELECT
@@ -309,10 +312,11 @@ WHERE
   NOT gsheets_matches OR NOT snowflake_matches
 ```
 
-Phew, only the 27th is off.
+Phew, only the 27th is wrong.
 ![Nov27](images/off_by_one.png)
 
 **Is Data Missing?**
+
 Let's join our Snowflake data against the source of truth and see what might be missing.
 ```sql
 SELECT
@@ -327,10 +331,12 @@ WHERE
 ```
 
 **Vendor ID 7 is completely missing from Snowflake on 2025-11-27.**
+
+![MissingVendor](images/vendorid_7.png)
+
 The Google Sheets dashboard was built from the raw API feed — so it has the correct numbers. Snowflake somehow lost all of `VENDORID=7`'s data for that specific day.
 
 Mystery solved. Time to file a ticket with the data engineering team.
-![MissingVendor](images/vendorid_7.png)
 
 ---
 
@@ -342,8 +348,8 @@ What you just did works. But it required:
 - Managing Snowflake credentials and key files
 - Wrangling with finicky extensions
 
-**With Greybeam**, you get a single interface to query across Snowflake, Google Sheets, APIs, etc. all in the BI tools you're already using.
+**With Greybeam**, you get a single interface to query across Snowflake, DuckDB, Google Sheets, APIs, etc. all in the BI tools you're already using.
 
-No extensions. No credential juggling. Just query your data!
+Greybeam will automatically route and translate queries to the most optimal query engine.
 
-Built with love by [Greybeam](https://greybeam.io).
+Built with love by [Greybeam](https://www.greybeam.ai).
