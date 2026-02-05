@@ -102,6 +102,8 @@ Now let's try querying our Google sheet!
 ```sql
 SELECT *
 FROM read_gsheet('https://docs.google.com/spreadsheets/d/1pBwIFpuEBNpBpqt78VBR-7NyHsA95Ic52lpVwva4ZAY/edit', sheet='Nov Revenue');
+```
+```
 ┌────────────┬────────────┐
 │    date    │  revenue   │
 │  varchar   │   double   │
@@ -157,6 +159,8 @@ CREATE SECRET snowflake_keypair (
     DATABASE 'GREYBEAM',
     WAREHOUSE 'VALENTINES_WH'
 );
+```
+```
 ┌─────────┐
 │ Success │
 │ boolean │
@@ -173,6 +177,8 @@ ATTACH '' AS snowflake_db (
       SECRET snowflake_keypair, 
       READ_ONLY,
       enable_pushdown true);
+```
+```
 [Snowflake Ext INFO] GetCredentials: auth_type_str = 'key_pair'
 [Snowflake Ext INFO] Set auth_type to KEY_PAIR
 [Snowflake Ext INFO] Extension directory: /Users/kylecheung/.duckdb/extensions/v1.4.3/osx_arm64
