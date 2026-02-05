@@ -1,6 +1,6 @@
 # Dear Snowflake, I Want an Open Relationship
 
-**Data Valentine Challenge 2025** | Hosted by [Greybeam](https://www.greybeam.ai)
+**Data Valentine Challenge 2026** | Hosted by [Greybeam](https://www.greybeam.ai)
 
 Greybeam deploys multi-engine query infrastructure. We provide a single endpoint that translates and routes queries to the most optimal query engine.
 
